@@ -5,7 +5,7 @@ from discord import Streaming
 from discord.utils import get
 from discord.ext import commands
 
-TOKEN = 'ODE0Nzk2Njg1MTU0NDUxNDY3.YDjEiw.9-Po_cIWEXoL3_H8_ZWLee5eBJs'
+TOKEN = 'secwet'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True)
 bot = commands.Bot(command_prefix='!',intents=intents)
 bot.remove_command('help')
