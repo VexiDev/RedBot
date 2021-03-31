@@ -5,7 +5,7 @@ from discord import Streaming
 from discord.utils import get
 from discord.ext import commands
 
-TOKEN = 'secwet'
+TOKEN = 'Token'
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True)
 bot = commands.Bot(command_prefix='!',intents=intents)
 bot.remove_command('help')
@@ -111,6 +111,7 @@ async def help(ctx):
     embedVar1.add_field(name="!vcmute", value="usage: !vcmute <@user> \n Denys user from speak in VCs", inline=False)
     embedVar1.add_field(name="!vcunmute", value="usage: !vcunmute <@user> \n Allows user to speak in VCs", inline=False)
     embedVar1.add_field(name="!purge", value="usage: !purge <amount>\n Deletes <amount> of messages from channel", inline=False)
+    embedVar1.add_field(name="!send", value="usage: !send <title of message> <filler of message> <color in hex(#000000)> <reactions> \n Sends a cusom embed message with or without reactions through the bot")
     embedVar1.add_field(name="!announceStream", value="usage: !announceStream <message>\n Sends a stream notification for RedLumux to #Announcements\n\n Developped by Vexi",inline=False)
     await ctx.send(embed=embedVar1)
 
@@ -119,7 +120,7 @@ async def help_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         embedVar = discord.Embed(title="RedLumux Bot Help Menu", description="Displays all available commands for the RedLumux Bot", color=0x00ff00)
         embedVar.add_field(name="!help", value="displays this message", inline=False)
-        embedVar.add_field(name="!f", value="pays respect \n\n Developped by Vexi", inline=True)
+        embedVar.add_field(name="!f", value="Pays respect \n\n Developped by Vexi", inline=True)
         await ctx.send(embed=embedVar)
 
 #------------------ Stream Announce------------------------------
@@ -127,7 +128,7 @@ async def help_error(ctx, error):
 @commands.has_permissions(manage_messages=True)
 async def announceStream(ctx, *,message="Im live right now, come watch!"):
     channel = bot.get_channel(817075705359630347)
-    await channel.send(f"<@&818741406171791380>\n:red_circle:  **LIVE**  :red_circle: {message}\nhttps://twitch.tv/RedLumux")
+    await channel.send(f"[<@&818741406171791380>] \n:red_circle:  **LIVE**  :red_circle: {message}\n\nhttps://twitch.tv/RedLumux")
     await bot.delete_message(ctx.message)
 
 @announceStream.error
@@ -135,15 +136,18 @@ async def clear_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("You cant do that!")
 
-#------------------Give viewer role on join---------------
+#--------------Give viewer role on join---------------
 @bot.event
 async def on_member_join(member):
     autorole = discord.utils.get(member.guild.roles, name = 'Viewers')
+    autorole1 = discord.utils.get(member.guild.roles, name = 'Notify')
     await member.add_roles(autorole)
+    await member.add_roles(autorole1)
     embedVar2 = discord.Embed(color=0x000000)
     embedVar2.set_thumbnail(url=member.avatar_url)
-    embedVar2.add_field(name=f"{member.name}", value=f"**has joined the server!**")
+    embedVar2.add_field(name=f"{member.name}", value=f"**has joined the server!**\n\n**Say Hello!**")
     await bot.get_channel(594189196483362827).send(embed=embedVar2)
+    await member.send("Welcome to the RedLumux discord. Before you continue make sure you read the rules and check out self roles. If you have any questions feel free to ask the staff! Enjoy your stay")
 
 #-----------------Purge command-----------------
 @bot.command(pass_context=True)
@@ -160,7 +164,10 @@ async def clear_error(ctx, error):
 @bot.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 816761584566665306:
+    emoji = payload.emoji.name
+    emoji = "'"+emoji+"'"
+    print(f"emoji = {emoji}")
+    if message_id == 816761584566665306 and (emoji=="'✅'"):
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
           
@@ -168,30 +175,135 @@ async def on_raw_reaction_add(payload):
         member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
         await member.add_roles(role)
 
-    if message_id == 818746001778933800:
+    if message_id == 823587309915078667 and (emoji=="'🔕'"):
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
           
-        role = discord.utils.get(guild.roles, name='Stream Notify') 
+        role = discord.utils.get(guild.roles, name='Notify') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+
+    if (message_id == 822221906073354281) and (emoji=="'🟪'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='purple') 
         member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
         await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟥'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='red') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟦'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='blue') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟨'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='yellow') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟩'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='green') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟧'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='orange') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'⬜'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='white') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+
 @bot.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == 816761584566665306:
+    emoji = payload.emoji.name
+    emoji = "'"+emoji+"'"
+    if message_id == 816761584566665306 and (emoji=="'✅'"):
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
           
         role = discord.utils.get(guild.roles, name='Verified') 
         member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
         await member.remove_roles(role)
-    if message_id == 818746001778933800:
+    if message_id == 823587309915078667 and (emoji=="'🔕'"):
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
           
-        role = discord.utils.get(guild.roles, name='Stream Notify') 
+        role = discord.utils.get(guild.roles, name='Notify') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.add_roles(role)
+
+
+    if (message_id == 822221906073354281) and (emoji=="'🟪'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='purple') 
         member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
         await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟥'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='red') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟦'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='blue') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟨'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='yellow') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟩'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='green') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'🟧'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='orange') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+    if (message_id == 822221906073354281) and (emoji=="'⬜'"):
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds)
+          
+        role = discord.utils.get(guild.roles, name='white') 
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(role)
+
 #--------------------   F   --------------------
 @bot.command()
 async def f(ctx):
@@ -200,9 +312,19 @@ async def f(ctx):
 
 #--------------------- SAY ----------------------
 @bot.command()
-async def send(ctx, title, desc, text):
-    embedVar2 = discord.Embed(title=f"{title}", description=f"{desc}", color=0x30f8ff)
-    embedVar2.add_field(name=f"------------------------------------------------------------------------------------------------\n{text}", value="**------------------------------------------------------------------------------------------------**", inline=False)
-    await ctx.send(embed=embedVar2)
+async def send(ctx, title, desc, color,reaction=[]):
+    sixteenIntegerHex = int(color.replace("#", ""), 16)
+    readableHex = int(hex(sixteenIntegerHex), 0)
+    embedVar2 = discord.Embed(title=f"{title}", description=f"{desc}", color=readableHex)
+    message = await ctx.send(embed=embedVar2)
+    print(f"length = "+str(len(reaction)))
+    for i in range(len(reaction)):
+        print(reaction[i])
+        await message.add_reaction(emoji=reaction[i])
+
+#---------------                 --------------------
+
 #---------------------TOKEN-----------------------
 bot.run(TOKEN)
+#template incase robin deletes server... <3
+#https://discord.new/jsdMAhdtZvvP
