@@ -1,5 +1,7 @@
 # RedBot - Developed by vexi#0420
 
+> This GitHub won't be updated until Redbot v2 is complete
+
 ## Info
 
 > This bot is a personal project to have a bot with all the features I want, free of paywalls and other limitations.
