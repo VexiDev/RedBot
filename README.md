@@ -5,7 +5,7 @@
 ## Info
 
 > This bot is a personal project to have a bot with all the features I want, free of paywalls and other limitations.
-> It's a general moderation bot with features such as Verification, Reaction Roles, and custom permissions. A full feature list can be found on the Project page of the github or on [redbot.dev](https://redbot.dev/)
+> It's a general moderation bot with features such as Verification, Reaction Roles, and custom permissions. A full feature list can be found on the Project page of the github or on [~~redbot.dev~~](https://redbot.dev/) Website Offline
 
 
 ## Get the Bot
