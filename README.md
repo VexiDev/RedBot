@@ -1,6 +1,6 @@
 # RedBot - Developed by vexi#0420
 
-> This GitHub won't be updated until Redbot v2 is complete
+> ~~This GitHub won't be updated until Redbot v2 is complete~~ Project Abandoned
 
 ## Info
 
